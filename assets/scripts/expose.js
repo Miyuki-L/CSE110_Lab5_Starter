@@ -5,7 +5,8 @@ window.addEventListener('DOMContentLoaded', init);
 function init() {
   // TODO
   imageSelectionListner(); 
-  playSoundListner();
+  playSoundListener();
+  volumeSliderListener();
 }
 
 function imageSelectionListner() {
@@ -25,7 +26,7 @@ function imageSelectionListner() {
   })
 }
 
-function playSoundListner() {
+function playSoundListener() {
   const playButton = document.querySelector("button");
   const audioElement = document.querySelector("audio");
   const selectElement = document.getElementById("horn-select");
@@ -35,11 +36,38 @@ function playSoundListner() {
     if (selectElement.value === "select") {
       return;
     }
-    
+    console.log("clicked");
     audioElement.play();
 
     if (selectElement.value === "party-horn") {
       jsConfetti.addConfetti()
     };
+  })
+}
+
+function volumeSliderListener() {
+  const volumeSlider = document.getElementById("volume");
+  const audioElement = document.querySelector("audio");
+  const volumeImg = document.querySelector("#volume-controls img");
+
+  let volume;
+  let level;
+
+  volumeSlider.addEventListener("input", (event) => {
+    volume = event.target.value;
+
+    if (volume == 0) {
+      level = 0;
+    } else if (volume < 33) {
+      level = 1;
+    } else if (volume < 67) {
+      level = 2;
+    } else {
+      level = 3;
+    }
+
+    volumeImg.src = `assets/icons/volume-level-${level}.svg`;
+    volumeImg.alt = `Volume level ${level}`;
+    audioElement.volume = volume/100;
   })
 }
